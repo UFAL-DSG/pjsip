@@ -7,12 +7,12 @@ Read the pjsip's `README.txt` for a general info and `COPYING` for the License.
 Modification
 ============
 
-This fork adds a new package called pjsuaxt which is an extended version of the pjsua package. 
+This fork adds a new Python package called pjsuaxt which is an extended version of the original pjsua package. 
 The pjsuaxt supports in addition in-memory playing and recording of audio.
 
-Whith this, you can implement full featured VOIP applications such as IVR systems.
+Whith this, you can implement full featured VOIP applications such as IVR systems directly in Python.
 
-The rest of PJSIP is unmodified.
+The rest of PJSIP is unmodified.                                                                    
 
 Installation
 ============
