@@ -19,6 +19,8 @@ Installation
 
 To install pjsuaxt, just build the pjsip, e.g.
 
+.. code-block:: bash
+
     $ git clone git@github.com:UFAL-DSG/pjsip.git
     $ cd pjsip
     $ ./configure CXXFLAGS=-fPIC CFLAGS=-fPIC LDFLAGS=-fPIC CPPFLAGS=-fPIC
@@ -27,6 +29,8 @@ To install pjsuaxt, just build the pjsip, e.g.
     $ make install
 
 then 
+
+.. code-block:: bash
 
     $ cd pjsip-apps/src/python/
     $ python setup-pjsuaxt.py install
