@@ -359,7 +359,8 @@ pj_status_t mem_capture_cb(pjmedia_port *port, void *usr_data) {
 
   pj_lock_acquire(p_mem_capture_var->lock);
 
-  //printf("mem_capture_cb()\n");
+//  printf("mem_capture_cb()\n");
+//  printf("%d %d %d %d\n", packet_size_multiple_of_frame_size*frame_buffer_multiple_of_packet_size, p_mem_capture_var->frames_in_buffer, packet_size_multiple_of_frame_size, p_mem_capture_var->samples_per_frame);
 
   if(p_mem_capture_var->frames_in_buffer == packet_size_multiple_of_frame_size*frame_buffer_multiple_of_packet_size) {
     // the frame buffer is full
