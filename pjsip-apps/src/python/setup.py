@@ -29,7 +29,7 @@ pj_version_major = ""
 pj_version_minor = ""
 pj_version_rev = ""
 pj_version_suffix = ""
-f = open('../../../version.mak', 'r')
+f = open('version.mak', 'r')
 for line in f:
     if line.find("export PJ_VERSION_MAJOR") != -1:
         tokens = line.split("=")
