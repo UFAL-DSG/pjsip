@@ -4,7 +4,7 @@ include build/host-$(HOST_NAME).mak
 include version.mak
 
 LIB_DIRS = pjlib/build pjlib-util/build pjnath/build third_party/build pjmedia/build pjsip/build
-DIRS = $(LIB_DIRS) pjsip-apps/build $(EXTRA_DIRS)
+DIRS = $(LIB_DIRS) pjsip-apps/build pjsip-apps/src/python $(EXTRA_DIRS)
 
 ifdef MINSIZE
 MAKE_FLAGS := MINSIZE=1
