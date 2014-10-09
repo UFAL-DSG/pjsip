@@ -11,6 +11,9 @@ MAKE_FLAGS := MINSIZE=1
 endif
 
 all clean dep depend distclean print realclean:
+	# Add version.mak to the Python extension.
+	cp version.mak pjsip-apps/src/python/
+	
 	for dir in $(DIRS); do \
 		if $(MAKE) $(MAKE_FLAGS) -C $$dir $@; then \
 		    true; \
