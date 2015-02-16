@@ -91,7 +91,7 @@ pj_status_t mem_player_cb(pjmedia_port *port, void *usr_data) {
     memset(p_mem_player_var->mem_player_buffer, 0, p_mem_player_var->mem_player_buffer_size);
   }
   else if(p_mem_player_var->frames_in_buffer < packet_size_multiple_of_frame_size) {
-    // there are to few data to be played
+    // there are too little of data to be played
     //printf("mem_player_cb - there are to few data to be played \n");
 
     //printf("%d %d\n", p_mem_player_var->frame_buffer_read, p_mem_player_var->frame_buffer_write);
