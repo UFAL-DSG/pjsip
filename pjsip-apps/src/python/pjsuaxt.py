@@ -2975,8 +2975,7 @@ class MemCapture:
         """
 
         lck = self._lib().auto_lock()
-        err, self.port_id, self.port_slot = _pjsuaxt.mem_capture_create(
-            self.clock_rate)
+        err, self.port_id, self.port_slot = _pjsuaxt.mem_capture_create(self.clock_rate)
         self._lib()._err_check("create()", self, err)
 
     def get_read_available(self):
@@ -2988,6 +2987,7 @@ class MemCapture:
         self._lib()._err_check("mem_capture_read_available", self, err)
 
         return num_samples
+
 
     def get_frame(self):
         """Return one frame from the memory capture.
@@ -3001,5 +3001,6 @@ class MemCapture:
     def flush(self):
         """Empties the capture's queue.
         """
-        while self.get_read_available():
-            self.get_frame()
+        lck = self._lib().auto_lock()
+        err = _pjsuaxt.mem_capture_flush(self.port_id)
+        self._lib()._err_check("mem_capture_flush", self, err)

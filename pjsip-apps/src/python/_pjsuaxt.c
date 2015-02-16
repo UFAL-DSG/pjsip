@@ -92,14 +92,13 @@ pj_status_t mem_player_cb(pjmedia_port *port, void *usr_data) {
   }
   else if(p_mem_player_var->frames_in_buffer < packet_size_multiple_of_frame_size) {
     // there are too little of data to be played
-    //printf("mem_player_cb - there are to few data to be played \n");
-
-    //printf("%d %d\n", p_mem_player_var->frame_buffer_read, p_mem_player_var->frame_buffer_write);
+    printf("mem_player_cb - playing less than packet_size_multiple_of_frame_size \n");
+    printf("%d %d\n", p_mem_player_var->frame_buffer_read, p_mem_player_var->frame_buffer_write);
 
     // set the mem player to zero
     memset(p_mem_player_var->mem_player_buffer, 0, p_mem_player_var->mem_player_buffer_size);
 
-    // I should play what I can otherwise it can happen that ends of utterances will not be played
+    // I should play what I can otherwise it can happen that the end of utterances will not be played
     memcpy(p_mem_player_var->mem_player_buffer, p_mem_player_var->frame_buffer_read,
       p_mem_player_var->frames_in_buffer*p_mem_player_var->samples_per_frame*2);
 
@@ -537,6 +536,10 @@ static PyObject *py_mem_capture_get_frame(PyObject *pSelf, PyObject *pArgs)
 
     p_mem_capture_var->frames_in_buffer -= 1;
 
+    if (p_mem_capture_var->frames_in_buffer < 0) {
+        printf("#py_mem_capture_get_frame - negative number of frames in p_mem_capture_var->frames_in_buffer\n");
+    }
+
     //printf("#py_mem_capture_get_frame - 3\n");
 
     PyObject *pFrame = PyString_FromPJ(&frame);
@@ -548,6 +551,38 @@ static PyObject *py_mem_capture_get_frame(PyObject *pSelf, PyObject *pArgs)
     return Py_BuildValue("iO", PJ_SUCCESS, pFrame);
 }
 
+
+/*
+ * py_mem_capture_flush
+ */
+
+static PyObject *py_mem_capture_flush(PyObject *pSelf, PyObject *pArgs)
+{
+    mem_capture_data * p_mem_capture_var = NULL;
+
+    printf("#py_mem_capture_flush - start\n");
+    PJ_UNUSED_ARG(pSelf);
+
+    if (!PyArg_ParseTuple(pArgs, "i", &p_mem_capture_var)) {
+        return NULL;
+    }
+
+    pj_lock_acquire(p_mem_capture_var->lock);
+
+    // empty frame buffer
+    memset(p_mem_capture_var->frame_buffer, 0, p_mem_capture_var->frame_buffer_size);
+    p_mem_capture_var->frame_buffer_write = p_mem_capture_var->frame_buffer;
+    p_mem_capture_var->frame_buffer_read = p_mem_capture_var->frame_buffer;
+
+    // empty mem capture buffer
+    memset(p_mem_capture_var->mem_capture_buffer, 0, p_mem_capture_var->mem_capture_buffer_size);
+
+    p_mem_capture_var->frames_in_buffer = 0;
+
+    pj_lock_release(p_mem_capture_var->lock);
+
+    return Py_BuildValue("i", PJ_SUCCESS);
+}
 
 /* END FJ Extension */
 
@@ -4982,6 +5017,10 @@ static PyMethodDef py_pjsua_methods[] =
     {
         "mem_capture_get_frame", py_mem_capture_get_frame, METH_VARARGS,
         "Get a frame with audio samples from the mem capturer buffer."
+    },
+    {
+        "mem_capture_flush", py_mem_capture_flush, METH_VARARGS,
+        "Flush mem capture buffers."
     },
 
 
